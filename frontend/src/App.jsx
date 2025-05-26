@@ -1,3 +1,4 @@
+// App.jsx (apenas com variantes de cor para Dark Mode)
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -30,15 +31,8 @@ function App() {
       alert("Usuário registrado com sucesso! Faça o login.");
       setRegisterForm({ name: "", email: "", password: "", telefone: "" });
     } catch (error) {
-      console.error(
-        "Erro no registro:",
-        error.response ? error.response.data : error.message
-      );
-      alert(
-        `Erro no registro: ${
-          error.response ? error.response.data : error.message
-        }`
-      );
+      console.error("Erro no registro:", error.response ? error.response.data : error.message);
+      alert(`Erro no registro: ${error.response ? error.response.data : error.message}`);
     }
   };
 
@@ -51,15 +45,8 @@ function App() {
       setIsLoggedIn(true);
       setLoginForm({ email: "", password: "" });
     } catch (error) {
-      console.error(
-        "Erro no login:",
-        error.response ? error.response.data : error.message
-      );
-      alert(
-        `Erro no login: ${
-          error.response ? error.response.data : "Credenciais inválidas"
-        }`
-      );
+      console.error("Erro no login:", error.response ? error.response.data : error.message);
+      alert(`Erro no login: ${error.response ? error.response.data : "Credenciais inválidas"}`);
     }
   };
 
@@ -71,7 +58,6 @@ function App() {
   };
 
   const fetchDirectory = async () => {
-    // ... (lógica fetchDirectory inalterada)
     if (!token) return;
     try {
       const res = await axios.get(`${API_URL}/directory`, {
@@ -79,14 +65,8 @@ function App() {
       });
       setDirectoryEntries(res.data);
     } catch (error) {
-      console.error(
-        "Erro ao buscar diretório:",
-        error.response ? error.response.data : error.message
-      );
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
+      console.error("Erro ao buscar diretório:", error.response ? error.response.data : error.message);
+      if (error.response && (error.response.status === 401 || error.response.status === 403)) {
         logout();
       }
     }
@@ -100,28 +80,28 @@ function App() {
 
   if (!isLoggedIn) {
     return (
-      // Container principal da página de login/registro
-      <div className="min-h-screen bg-slate-100 flex flex-col items-center justify-center p-4"> {/* Fundo cinza claro, altura mínima da tela, centraliza conteúdo, padding */}
+      // Container principal: fundo claro, muda para fundo escuro no dark mode
+      <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center p-4 text-gray-800 dark:text-gray-200 transition-colors duration-300">
         
-        {/* Card para o formulário de Login */}
-        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm mb-8"> {/* Fundo branco, padding, bordas arredondadas, sombra, largura máxima, margem inferior */}
-          <h1 className="text-2xl font-bold text-center text-gray-700 mb-4"> {/* Tamanho do texto, negrito, centralizado, cor, margem inferior */}
+        {/* Card para o formulário de Login: fundo branco, muda para fundo cinza escuro no dark mode */}
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-sm mb-8 transition-colors duration-300">
+          <h1 className="text-2xl font-bold text-center text-gray-700 dark:text-gray-100 mb-4">
             Login
           </h1>
-          <form onSubmit={doLogin} className="space-y-4"> {/* Espaçamento entre os elementos do formulário */}
+          <form onSubmit={doLogin} className="space-y-4">
             <div>
-              <label htmlFor="login-email" className="block text-sm font-medium text-gray-600">Email</label> {/* Estilo para o label */}
+              <label htmlFor="login-email" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Email</label>
               <input
                 id="login-email"
                 name="email"
                 placeholder="Email"
                 value={loginForm.email}
                 onChange={handleLoginChange}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" /* Margem topo, largura total, padding, borda, arredondado, sombra, foco */
+                className="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400"
               />
             </div>
             <div>
-              <label htmlFor="login-password" className="block text-sm font-medium text-gray-600">Senha</label>
+              <label htmlFor="login-password" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Senha</label>
               <input
                 id="login-password"
                 name="password"
@@ -129,62 +109,59 @@ function App() {
                 type="password"
                 value={loginForm.password}
                 onChange={handleLoginChange}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150" /* Largura total, cor de fundo, cor no hover, texto branco, negrito, padding, arredondado, transição */
+              className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-150"
             >
               Entrar
             </button>
           </form>
         </div>
 
-        {/* Linha divisória (opcional) */}
-        {/* <hr className="w-full max-w-sm border-gray-300 mb-8" /> */}
-
         {/* Card para o formulário de Registro */}
-        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-sm">
-          <h1 className="text-2xl font-bold text-center text-gray-700 mb-4">
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-sm transition-colors duration-300">
+          <h1 className="text-2xl font-bold text-center text-gray-700 dark:text-gray-100 mb-4">
             Registrar Novo Usuário
           </h1>
           <form onSubmit={register} className="space-y-4">
             <div>
-              <label htmlFor="reg-name" className="block text-sm font-medium text-gray-600">Nome</label>
+              <label htmlFor="reg-name" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Nome</label>
               <input
                 id="reg-name"
                 name="name"
                 placeholder="Nome"
                 value={registerForm.name}
                 onChange={handleRegisterChange}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                className="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-green-500 dark:focus:ring-green-400 focus:border-green-500 dark:focus:border-green-400"
               />
             </div>
             <div>
-              <label htmlFor="reg-email" className="block text-sm font-medium text-gray-600">Email</label>
+              <label htmlFor="reg-email" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Email</label>
               <input
                 id="reg-email"
                 name="email"
                 placeholder="Email"
                 value={registerForm.email}
                 onChange={handleRegisterChange}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                className="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-green-500 dark:focus:ring-green-400 focus:border-green-500 dark:focus:border-green-400"
               />
             </div>
             <div>
-              <label htmlFor="reg-tel" className="block text-sm font-medium text-gray-600">Telefone <span className="text-xs text-gray-500">(opcional)</span></label>
+              <label htmlFor="reg-tel" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Telefone <span className="text-xs text-gray-500 dark:text-gray-400">(opcional)</span></label>
               <input
                 id="reg-tel"
                 name="telefone"
                 placeholder="Telefone"
                 value={registerForm.telefone}
                 onChange={handleRegisterChange}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                className="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-green-500 dark:focus:ring-green-400 focus:border-green-500 dark:focus:border-green-400"
               />
             </div>
             <div>
-              <label htmlFor="reg-password" className="block text-sm font-medium text-gray-600">Senha</label>
+              <label htmlFor="reg-password" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Senha</label>
               <input
                 id="reg-password"
                 name="password"
@@ -192,12 +169,12 @@ function App() {
                 type="password"
                 value={registerForm.password}
                 onChange={handleRegisterChange}
-                className="mt-1 w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500"
+                className="mt-1 w-full p-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:ring-green-500 dark:focus:ring-green-400 focus:border-green-500 dark:focus:border-green-400"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150"
+              className="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-150"
             >
               Cadastrar
             </button>
@@ -207,37 +184,39 @@ function App() {
     );
   }
 
-  // PARTE QUANDO ESTÁ LOGADO (você aplicaria estilos aqui também)
+  // PARTE QUANDO ESTÁ LOGADO
   return (
-    <div className="p-4"> {/* Padding geral */}
-      <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md"> {/* Largura máxima, centralizado, fundo branco, padding, arredondado, sombra */}
-        <div className="flex justify-between items-center mb-6"> {/* Layout flex para alinhar título e botão */}
-          <h1 className="text-3xl font-bold text-gray-800">Diretório Telefônico</h1>
-          <button 
+    // Container principal: fundo claro, muda para fundo mais escuro no dark mode
+    <div className="min-h-screen bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-gray-100 p-4 transition-colors duration-300">
+      {/* Removi o ThemeToggleButton daqui, conforme solicitado */}
+      <div className="max-w-2xl mx-auto bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md transition-colors duration-300">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Diretório Telefônico</h1>
+          <button
             onClick={logout}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-md transition duration-150"
+            className="bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 text-white font-semibold py-2 px-3 rounded-md transition duration-150"
           >
             Sair
           </button>
         </div>
-        
+
         {directoryEntries.length > 0 ? (
-          <ul className="space-y-3"> {/* Espaçamento entre os itens da lista */}
+          <ul className="space-y-3">
             {directoryEntries.map((user) => (
-              <li 
-                key={user.id} 
-                className="p-3 bg-gray-50 border border-gray-200 rounded-md shadow-sm" /* Padding, fundo, borda, arredondado, sombra leve */
+              <li
+                key={user.id}
+                className="p-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-sm transition-colors duration-300"
               >
-                <p className="font-semibold text-gray-700">{user.name}</p>
-                <p className="text-sm text-gray-600">{user.email}</p>
-                <p className="text-sm text-gray-500">
+                <p className="font-semibold text-gray-700 dark:text-gray-200">{user.name}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{user.email}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Telefone: {user.telefone || "Não informado"}
                 </p>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500 text-center py-4">Nenhum usuário no diretório ou carregando...</p>
+          <p className="text-gray-500 dark:text-gray-400 text-center py-4">Nenhum usuário no diretório ou carregando...</p>
         )}
       </div>
     </div>
