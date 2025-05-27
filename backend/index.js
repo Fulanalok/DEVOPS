@@ -6,7 +6,7 @@ const mysql = require("mysql2/promise");
 
 const app = express();
 const port = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || "telefonesecretos"; 
+const JWT_SECRET = process.env.JWT_SECRET || "telefonesecretos";
 console.log("Iniciando backend...");
 
 // Configuração do Pool de Conexões com o MySQL
@@ -77,9 +77,9 @@ function authenticateToken(req, res, next) {
   jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
       console.log("Token JWT inválido:", err.message);
-      return res.sendStatus(403); // 403 Erro forbiden 
+      return res.sendStatus(403); // 403 Erro forbiden
     }
-    req.user = user; 
+    req.user = user;
     next();
   });
 }
@@ -100,7 +100,7 @@ app.post("/register", async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     await pool.query(
       "INSERT INTO users (name, email, password, telefone) VALUES (?, ?, ?, ?)",
-      [name, email, hashed, telefone || null] 
+      [name, email, hashed, telefone || null]
     );
     console.log("Usuário registrado com sucesso:", email);
     res.status(201).send("Usuário registrado com sucesso.");
@@ -136,7 +136,6 @@ app.post("/login", async (req, res) => {
         { id: user.id, email: user.email, name: user.name },
         JWT_SECRET,
         {
-         
           expiresIn: "1h", // uma hora de token
         }
       );
@@ -174,11 +173,11 @@ app.get("/directory", authenticateToken, async (req, res) => {
   console.log("Usuário", req.user.email, "acessando o diretório.");
   try {
     const [rows] = await pool.query(
-      "SELECT id, name, email, telefone FROM users ORDER BY name ASC" 
+      "SELECT id, name, email, telefone FROM users ORDER BY name ASC"
     );
     res.json(rows);
   } catch (err) {
-    console.error("Erro ao buscar o diretório de usuários:", err); 
+    console.error("Erro ao buscar o diretório de usuários:", err);
     res.status(500).send("Erro interno no servidor ao buscar o diretório.");
   }
 });
@@ -200,7 +199,7 @@ app.put("/me/profile", authenticateToken, async (req, res) => {
     values.push(name);
   }
   if (typeof telefone !== "undefined") {
-    fieldsToUpdate.push("telefone = ?"); 
+    fieldsToUpdate.push("telefone = ?");
     values.push(telefone === "" ? null : telefone);
   }
 
@@ -208,7 +207,7 @@ app.put("/me/profile", authenticateToken, async (req, res) => {
     return res.status(400).send("Nenhum campo válido para atualização.");
   }
 
-  values.push(userId); 
+  values.push(userId);
 
   try {
     const sql = `UPDATE users SET ${fieldsToUpdate.join(", ")} WHERE id = ?`;
@@ -219,7 +218,7 @@ app.put("/me/profile", authenticateToken, async (req, res) => {
     }
     console.log("Perfil do usuário", userId, "atualizado com sucesso.");
     const [updatedUserRows] = await pool.query(
-      "SELECT id, name, email, telefone FROM users WHERE id = ?", 
+      "SELECT id, name, email, telefone FROM users WHERE id = ?",
       [userId]
     );
     res.json(updatedUserRows[0]);
@@ -229,7 +228,7 @@ app.put("/me/profile", authenticateToken, async (req, res) => {
   }
 });
 
-// ROTAS DA AGENDA PESSOAL // 
+// ROTAS DA AGENDA PESSOAL //
 
 // Adicionar um novo contato na agenda pessoal
 app.post("/contacts", authenticateToken, async (req, res) => {
@@ -253,17 +252,15 @@ app.post("/contacts", authenticateToken, async (req, res) => {
       "para o usuário:",
       userId
     );
-  
-    res
-      .status(201)
-      .json({
-        id: result.insertId,
-        nome,
-        numero,
-        email,
-        observacoes,
-        user_id: userId,
-      });
+
+    res.status(201).json({
+      id: result.insertId,
+      nome,
+      numero,
+      email,
+      observacoes,
+      user_id: userId,
+    });
   } catch (err) {
     if (err.code === "ER_DUP_ENTRY") {
       console.error(
@@ -287,13 +284,12 @@ app.get("/contacts", authenticateToken, async (req, res) => {
   const { search } = req.query;
 
   try {
-   
     let query =
       "SELECT id, nome, numero, email, observacoes FROM celulares WHERE user_id = ?";
     const queryParams = [userId];
 
     if (search) {
-      query += " AND (nome LIKE ? OR numero LIKE ?)"; 
+      query += " AND (nome LIKE ? OR numero LIKE ?)";
       queryParams.push(`%${search}%`, `%${search}%`);
     }
     query += " ORDER BY nome ASC";
@@ -436,4 +432,3 @@ app.listen(port, () => {
   console.log(`Servidor backend rodando na porta ${port}`);
 });
 console.log("Backend iniciado com sucesso.");
-
