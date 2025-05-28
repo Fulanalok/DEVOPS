@@ -24,8 +24,8 @@ try {
   console.log("Configuração do banco (dbConfig) definida:", dbConfig);
 
   const NUM_USERS_TO_CREATE = 15;
-  const CONTACTS_PER_USER_MAX_RANGE = 6; // Define o limite superior para o range de contatos
-  const CONTACTS_PER_USER_MIN = 2; // Mínimo de contatos por usuário
+  const CONTACTS_PER_USER_MAX_RANGE = 6; 
+  const CONTACTS_PER_USER_MIN = 2;
   const DEFAULT_PASSWORD = "password123";
 
   async function seedDatabase() {

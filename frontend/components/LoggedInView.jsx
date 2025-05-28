@@ -2,13 +2,11 @@
 import React from 'react';
 import UserListItem from './UserListItem';
 
-// MUDANÇA AQUI: de DirectoryView para LoggedInView
 function LoggedInView({ directoryEntries, onLogout, onNavigateToContacts }) {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-gray-100 p-4 transition-colors duration-300">
       <div className="max-w-2xl mx-auto bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md transition-colors duration-300">
         <div className="flex justify-between items-center mb-6">
-          {/* Você pode querer mudar este título também se "LoggedInView" tiver um propósito mais genérico */}
           <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Diretório Telefônico</h1>
           <div>
             <button
@@ -40,5 +38,4 @@ function LoggedInView({ directoryEntries, onLogout, onNavigateToContacts }) {
   );
 }
 
-// MUDANÇA AQUI: de DirectoryView para LoggedInView
 export default LoggedInView;

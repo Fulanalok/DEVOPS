@@ -1,4 +1,3 @@
-// src/components/ContactsView.jsx
 import React, { useState } from 'react';
 import ContactListItem from './ContactListItem';
 import ContactForm from './ContactForm';
@@ -16,39 +15,31 @@ function ContactsView({
   setSearchTerm
 }) {
   const [showForm, setShowForm] = useState(false);
-  const [editingContact, setEditingContact] = useState(null); // Contato atualmente em edição
+  const [editingContact, setEditingContact] = useState(null);
   const [actionMessage, setActionMessage] = useState({type: '', text: ''});
-
 
   const handleEdit = (contact) => {
     setEditingContact(contact);
     setShowForm(true);
-    setActionMessage({type:'', text:''}); // Limpa mensagens anteriores
+    setActionMessage({type:'', text:''});
   };
 
   const handleDelete = (contactId) => {
     if (window.confirm("Tem certeza que deseja excluir este contato?")) {
-        onDeleteContact(contactId, (success, message) => {
-            setActionMessage({type: success ? 'success' : 'error', text: message});
-        });
+      onDeleteContact(contactId, (success, message) => {
+        setActionMessage({type: success ? 'success' : 'error', text: message});
+      });
     }
   };
 
   const handleFormSubmit = (formData, callback) => {
     if (editingContact) {
       onUpdateContact(editingContact.id, formData, (success, message) => {
-        callback(success, message); // Passa o resultado para o ContactForm
-        if (success) {
-            // setShowForm(false); // O ContactForm já fecha ao ter sucesso na edição
-            // setEditingContact(null);
-        }
+        callback(success, message);
       });
     } else {
-      onAddContact(formData,  (success, message) => {
-        callback(success, message); // Passa o resultado para o ContactForm
-        if (success) {
-            // setShowForm(false); // O ContactForm já limpa o form ao ter sucesso na adição
-        }
+      onAddContact(formData, (success, message) => {
+        callback(success, message);
       });
     }
   };
@@ -57,13 +48,13 @@ function ContactsView({
     setShowForm(false);
     setEditingContact(null);
     setActionMessage({type:'', text:''});
-  }
+  };
 
   const handleOpenNewContactForm = () => {
     setEditingContact(null);
     setShowForm(true);
     setActionMessage({type:'', text:''});
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-gray-100 p-4 transition-colors duration-300">
@@ -123,7 +114,6 @@ function ContactsView({
               />
             </div>
           )}
-
 
           {isLoading && <p className="text-center py-4">Carregando contatos...</p>}
           {error && <p className="text-red-500 text-center py-4">{error}</p>}
